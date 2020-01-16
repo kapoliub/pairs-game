@@ -1,6 +1,51 @@
-table{
-    width: 800px;
+*{
+    font-family: 'Press Start 2P', cursive;
+
 }
+
+.main-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    .main-block {
+        width: 350px;
+        height: 250px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -125px 0 0 -125px;
+    }
+    .level-block{
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 46%;
+        margin: -125px 0 0 -125px;
+        // text-align: center;
+        .level-list{
+            // width: 50%;
+            margin-left: 90px;
+            margin-top: 50px;
+            
+            li{
+                // display: inline-block;
+                padding-left: 10px;
+                list-style-type: none;
+                font-size: 16px;
+                &:hover{
+                    cursor: pointer;
+                    list-style-image: url('../img/pointer-logo.png');
+                    padding-left: 15px;
+                }
+            }
+        }
+        
+    }
+}  
+
 img{
     width: 100px;
     height: 150px;
