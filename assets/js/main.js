@@ -51,101 +51,79 @@ $(function(){
             data: ''
         }
         $("td img").click(function (){
+            if(firstCard.id != '' && secondCard.id != '' ){
+                return
+            }
             if(firstCard.id == '' || secondCard.id == ''){
                 if(firstCard.id == ''){
                     firstCard.id = $(this).attr('card-id')
                     $(this).removeAttr('card-id')
                     firstCard.data = $(this);
-                    console.log(firstCard.id)
+                    firstCard.data.css('opacity', '1');
+                    // console.log(firstCard.id)
                 }
                 else if(secondCard.id == ''){
                     secondCard.id = $(this).attr('card-id');
                     secondCard.data = $(this);
-                    console.log(secondCard.id)
+                    secondCard.data.css('opacity', '1');
+                    // console.log(secondCard.id)
                     if(firstCard.id === secondCard.id){
-                        firstCard.data.remove();
-                        secondCard.data.remove();
-                        console.log('yes')
+                        setTimeout(deleteCard, 1000, firstCard, secondCard)
                     }
                     else{
-                        firstCard.data.attr('card-id', firstCard.id)
+                        setTimeout(closeCards, 1000, firstCard, secondCard)
                     }
-                    firstCard.id = '';
-                    firstCard.data = '';
-                    secondCard.id = '';
-                    secondCard.data = '';
                 } 
             }
         });
     }
-
-    // openCards()
-    // fillField(4);
-
-    
-    // pressStart()
-    
-
-    // function startBlinking() {
-    //     $("#start-screen span").toggle();
-    // }
-
-    // let blink = setInterval(startBlinking, 500);
-
-    function pressStart(){
-        // clearTimeout(blink);
-        $("#start-screen").hide();
-        $("#level-choose").show()
-        // chooseDifficult();
-        fillField(4)
-        openCards();
+    function deleteCard(first, second){
+        first.data.parent().css('background-color', 'grey')
+        second.data.parent().css('background-color', 'grey')
+        first.data.remove();
+        second.data.remove();
+        first.id = '';
+        first.data = '';
+        second.id = '';
+        second.data = '';
     }
-    // fillField(6)
-    // chooseDifficult();
-    // openCards()
-
-    function chooseDifficult(){
-        let level;
-        $('#level-choose li').click(function(){
-            level = $(this).attr('id');
-            switch(level){
-                case 'level-1':
-                    fillField(4);
-                    $("#level-choose li").hide();
-                    $("#level-choose span").hide();
-                    break;
-                case 'level-2':
-                    fillField(6)
-                    $("#level-choose li").hide();
-                    $("#level-choose span").hide();
-                    break;
-                case 'level-3':
-                    fillField(8);
-                    $("#level-choose li").hide();
-                    $("#level-choose span").hide();
-                    break;
-                case 'level-4':
-                    fillField(10);
-                    $("#level-choose li").hide();
-                    $("#level-choose span").hide();
-                    break;
-            }
-        }); 
+    function closeCards(first, second){
+        first.data.attr('card-id', first.id)
+        first.data.css('opacity', '0');
+        second.data.css('opacity', '0');
+        first.id = '';
+        first.data = '';
+        second.id = '';
+        second.data = '';
         
     }
-    
 
-    if(isStarted === false){
+    function startBlinking() {
+        $("#start-screen span").toggle();
+    }
+    let blink = setInterval(startBlinking, 500);
+
+    function pressStart(){
+        clearTimeout(blink);
+        $("#start-screen").attr('isPlaying', 'true')
+        $("#start-screen").hide();
+        $("#level-choose").show()
+        $("#level-choose li").click(function(){
+            fillField($(this).attr('level-id'))
+            openCards();
+            $("#level-choose").hide()
+        })
+    }
+
+    if($("#start-screen").attr('isPlaying') != true){
         $(document).on('keyup',function(e){
             if(e.keyCode === 13 || e.keyCode === 32){
                 pressStart();
-                isStarted = true;
             }
         });
         
         $("#start-screen").click(function(){
             pressStart();
-            isStarted = true;
         })
     }
 });
