@@ -1,5 +1,7 @@
 $(function(){
-    let isStarted = false;
+    let cardTransitionTime = 500;
+    let switching = false
+
     function shuffle(arr){
         let j, temp;
         for(let i = arr.length - 1; i > 0; i--){
@@ -36,7 +38,15 @@ $(function(){
         let arr = getArray(sideSize);
 
         $("td").each(function(i){
-            $(this).append(`<img card-id='${arr[i]}' src='./build/img/${arr[i]}.jpg'></img>`)
+            // $(this).append(`<img card-id='${arr[i]}' class='image' src='./build/img/${arr[i]}.jpg'></img>`)
+            $(this).append(`
+                <div id='card' class="card">
+                    <div class="card-wrapper">
+                        <img class="card-side is-active" src='./build/img/shirt.png'/>
+                        <img card-id='${arr[i]}' class="card-side card-side-back" src='./build/img/${arr[i]}.jpg' />
+                    </div>
+                </div>
+            `)
         })
     }
 
@@ -50,23 +60,28 @@ $(function(){
             id: '',
             data: ''
         }
-        $("td img").click(function (){
+        $(".card").click(function (){
+            // console.log($(this).find('.card-side-back')[0])
+            // console.log($(this))
             if(firstCard.id != '' && secondCard.id != '' ){
                 return
             }
             if(firstCard.id == '' || secondCard.id == ''){
                 if(firstCard.id == ''){
-                    firstCard.id = $(this).attr('card-id')
-                    $(this).removeAttr('card-id')
+                    firstCard.id = $(this).find('.card-side-back').attr('card-id');
                     firstCard.data = $(this);
-                    firstCard.data.css('opacity', '1');
-                    // console.log(firstCard.id)
+                    $(this).find('.card-side-back').removeAttr('card-id')
+                    // firstCard.data.css('opacity', '1');
+                    flipCard(firstCard.data)
+                    console.log(firstCard.id)
+                    // console.log(firstCard.data)
                 }
                 else if(secondCard.id == ''){
-                    secondCard.id = $(this).attr('card-id');
+                    secondCard.id = $(this).find('.card-side-back').attr('card-id');
                     secondCard.data = $(this);
-                    secondCard.data.css('opacity', '1');
-                    // console.log(secondCard.id)
+                    // secondCard.data.css('opacity', '1');
+                    console.log(secondCard.id)
+                    flipCard(secondCard.data)
                     if(firstCard.id === secondCard.id){
                         setTimeout(deleteCard, 1000, firstCard, secondCard)
                     }
@@ -78,19 +93,20 @@ $(function(){
         });
     }
     function deleteCard(first, second){
-        first.data.parent().css('background-color', 'grey')
-        second.data.parent().css('background-color', 'grey')
-        first.data.remove();
-        second.data.remove();
+        first.data.css('opacity', 0.3)
+        second.data.css('opacity', 0.3)
         first.id = '';
         first.data = '';
         second.id = '';
         second.data = '';
     }
     function closeCards(first, second){
-        first.data.attr('card-id', first.id)
-        first.data.css('opacity', '0');
-        second.data.css('opacity', '0');
+        first.data.find('.card-side-back').attr('card-id', first.id)
+        // console.log(first.data.find('.card-side-back').attr('card-id'))
+        // first.data.css('opacity', '0');
+        // second.data.css('opacity', '0');
+        flipCard(first.data, second.data)
+        
         first.id = '';
         first.data = '';
         second.id = '';
@@ -125,5 +141,30 @@ $(function(){
         $("#start-screen").click(function(){
             pressStart();
         })
+    }
+
+    // card flip
+    
+
+    // $('.card').click(flipCard)
+
+    function flipCard (card1, card2 = false) {
+        if (switching) {
+            return false
+        }
+        switching = true
+        
+        card1.toggleClass('is-switched')
+        window.setTimeout(function () {
+            card1.children().children().toggleClass('is-active')
+            switching = false
+        }, cardTransitionTime / 2)
+        if(card2){
+            card2.toggleClass('is-switched')
+            window.setTimeout(function () {
+                card2.children().children().toggleClass('is-active')
+                switching = false
+            }, cardTransitionTime / 2)
+        }
     }
 });
