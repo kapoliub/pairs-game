@@ -1,0 +1,61 @@
+{
+  "name": "pairs-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "gulp start",
+    "continue": "gulp continue",
+    "build": "gulp build",
+    "server": "gulp serve",
+    "default": "gulp default"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kapoliub/pairs-game.git"
+  },
+  "author": "kapov liubomyr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kapoliub/pairs-game/issues"
+  },
+  "homepage": "https://github.com/kapoliub/pairs-game#readme",
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "browser-sync": "^2.26.7",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-changed": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-imagemin": "^6.2.0",
+    "gulp-notify": "^3.2.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2",
+    "gulp-uglify-es": "^2.0.0",
+    "gulp-watch-sass": "^1.4.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.16.0",
+    "rename": "^1.0.4"
+  },
+  "dependencies": {
+    "bootstrap": "^4.4.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "ie >= 8",
+    "edge >= 15",
+    "ie_mob >= 10",
+    "ff >= 45",
+    "chrome >= 45",
+    "safari >= 7",
+    "opera >= 23",
+    "ios >= 7",
+    "android >= 4",
+    "bb >= 10"
+  ]
+}
