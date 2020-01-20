@@ -1,6 +1,8 @@
 $(function(){
     let cardTransitionTime = 500;
     let switching = false
+    let s = 1;
+    let m = 0;
 
     function shuffle(arr){
         let j, temp;
@@ -25,8 +27,28 @@ $(function(){
         return arr;
     }
 
+    function flipCard (card1, card2 = false) {
+        if (switching) {
+            return false
+        }
+        switching = true
+        
+        card1.toggleClass('is-switched')
+        window.setTimeout(function () {
+            card1.children().children().toggleClass('is-active')
+            switching = false
+        }, cardTransitionTime / 2)
+        if(card2){
+            card2.toggleClass('is-switched')
+            window.setTimeout(function () {
+                card2.children().children().toggleClass('is-active')
+                switching = false
+            }, cardTransitionTime / 2)
+        }
+    }
 
     function fillField(sideSize){
+        // $('.main-container').append(`<table id=''play-field></table>`)
         for(let i = 0; i < sideSize; i++){
             $('#play-field').append(`<tr></tr>`) 
         }
@@ -50,7 +72,7 @@ $(function(){
         })
     }
 
-    function openCards(){
+    function openCards(time){
         let firstCard = {
             id: '',
             data: ''
@@ -63,6 +85,10 @@ $(function(){
         $(".card").click(function (){
             // console.log($(this).find('.card-side-back')[0])
             // console.log($(this))
+            // console.log($("#timer").text())
+            if($(this).hasClass('is-switched')){
+                return
+            }
             if(firstCard.id != '' && secondCard.id != '' ){
                 return
             }
@@ -70,64 +96,114 @@ $(function(){
                 if(firstCard.id == ''){
                     firstCard.id = $(this).find('.card-side-back').attr('card-id');
                     firstCard.data = $(this);
-                    $(this).find('.card-side-back').removeAttr('card-id')
-                    // firstCard.data.css('opacity', '1');
                     flipCard(firstCard.data)
-                    console.log(firstCard.id)
-                    // console.log(firstCard.data)
+                    // console.log(firstCard.id)
+                    // console.log(firstCard.data[0])
                 }
-                else if(secondCard.id == ''){
+                else if(secondCard.id == ''){ 
+                    // if($(this).hasClass('is-switched')){
+                    //     return
+                    // }
                     secondCard.id = $(this).find('.card-side-back').attr('card-id');
                     secondCard.data = $(this);
-                    // secondCard.data.css('opacity', '1');
-                    console.log(secondCard.id)
+                    // console.log(secondCard.id)
                     flipCard(secondCard.data)
                     if(firstCard.id === secondCard.id){
-                        setTimeout(deleteCard, 1000, firstCard, secondCard)
+                        setTimeout(deleteCard, 1000, firstCard, secondCard, time)
                     }
                     else{
                         setTimeout(closeCards, 1000, firstCard, secondCard)
                     }
                 } 
             }
+            
         });
     }
-    function deleteCard(first, second){
-        first.data.css('opacity', 0.3)
-        second.data.css('opacity', 0.3)
+    function deleteCard(first, second, time){
+        // first.data.css('opacity', 0.3)
+        // second.data.css('opacity', 0.3)
+        first.data.find('.card-wrapper').remove();
+        second.data.find('.card-wrapper').remove();
         first.id = '';
         first.data = '';
         second.id = '';
         second.data = '';
+        if($(".card").children().length < 1){
+            clearInterval(time);
+            endGame();
+        }
     }
     function closeCards(first, second){
-        first.data.find('.card-side-back').attr('card-id', first.id)
+        // first.data.find('.card-side-back').attr('card-id', first.id)
         // console.log(first.data.find('.card-side-back').attr('card-id'))
-        // first.data.css('opacity', '0');
-        // second.data.css('opacity', '0');
         flipCard(first.data, second.data)
-        
         first.id = '';
         first.data = '';
         second.id = '';
         second.data = '';
+        
+    }
+
+    function endGame(){
+        let time = $("#timer").text()
+        
+        $('#play-field').children().remove();
+        $('#play-field').hide();
+        $(".main-container").append(`
+            <div id="result-field">
+                <h2>Your time is ${time}</h2>
+                <p id='end-game-screen'>Press Start to reset</p>
+            </div>
+        `)
+        let endScreenBlink = setInterval(endBlinkink, 500)
+        $('#timer-block').hide();
+
+        $(document).on('keyup',function(e){
+            if(e.keyCode === 13 || e.keyCode === 32){
+                location.reload();
+            }
+        });
+        
+        $("#result-field").click(function(){
+            location.reload();
+        });
+
+    }
+
+    function timer(){
+        if(s<10){
+            $("#timer").text(`${m}:0${s}`)
+        }
+        else{
+            $("#timer").text(`${m}:${s}`)
+        }
+        s++
+        if(s>59){
+            m++;
+            s=0;
+        }
         
     }
 
     function startBlinking() {
         $("#start-screen span").toggle();
     }
+    function endBlinkink(){
+        $('#end-game-screen').toggle();
+    }
     let blink = setInterval(startBlinking, 500);
 
     function pressStart(){
         clearTimeout(blink);
-        $("#start-screen").attr('isPlaying', 'true')
+        $("#start-screen").attr('isPlaying', true)
         $("#start-screen").hide();
         $("#level-choose").show()
         $("#level-choose li").click(function(){
             fillField($(this).attr('level-id'))
-            openCards();
+            let time = setInterval(timer, 1000)
+            openCards(time);
             $("#level-choose").hide()
+            $("#timer-block").show();
         })
     }
 
@@ -140,31 +216,6 @@ $(function(){
         
         $("#start-screen").click(function(){
             pressStart();
-        })
-    }
-
-    // card flip
-    
-
-    // $('.card').click(flipCard)
-
-    function flipCard (card1, card2 = false) {
-        if (switching) {
-            return false
-        }
-        switching = true
-        
-        card1.toggleClass('is-switched')
-        window.setTimeout(function () {
-            card1.children().children().toggleClass('is-active')
-            switching = false
-        }, cardTransitionTime / 2)
-        if(card2){
-            card2.toggleClass('is-switched')
-            window.setTimeout(function () {
-                card2.children().children().toggleClass('is-active')
-                switching = false
-            }, cardTransitionTime / 2)
-        }
+        });
     }
 });

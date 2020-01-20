@@ -13,21 +13,38 @@ $card-transition-time: 0.5s;
     top: 0;
     left: 0;
     overflow: auto;
+    #timer-block{
+        display: none;
+        position: fixed;
+        top: 10%;
+        left: 10%;
+        #timer{
+            padding-left: 5px;
+        }
+    }
     #play-field{
+        // display: none;
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        img{
+            width: 100px;
+            height: 150px;
+        }
         margin: auto;
         td{
+            width: 112px;
+            height: 162px;
             .card {
-                // margin: 2rem auto;
-                // width: 330px;
                 border-radius: 5px;
             }
-            
             .card-side {
-                // padding: 1em;
                 border-radius: 5px;
                 color: white;
             }
             .card {
+                padding: 5px;
                 cursor: pointer;
                 perspective: 600px;
                 position: relative;
@@ -60,9 +77,22 @@ $card-transition-time: 0.5s;
             .card-side-back {
                 transform: rotateY(-180deg);
             }
-            width: 100px;
-            height: 150px;
         }
+    }
+    #result-field{
+        margin-bottom: 100px;
+        text-align: center;
+        width: 400px;
+        height: 50px;
+        position: absolute;
+        top: 40%;
+        left: 45%;
+        margin: -125px 0 0 -125px;
+        h2{
+            line-height: 2em;
+            margin-bottom: 50px;
+        }
+        
     }
     .main-block {
         h1{
@@ -73,14 +103,14 @@ $card-transition-time: 0.5s;
         height: 250px;
         position: absolute;
         top: 40%;
-        left: 45%;
+        left: 42%;
         margin: -125px 0 0 -125px;
     }
     .level-block{
         display: none;
         position: absolute;
         top: 50%;
-        left: 47%;
+        left: 45%;
         margin: -125px 0 0 -125px;
         // text-align: center;
         .level-list{
@@ -100,7 +130,6 @@ $card-transition-time: 0.5s;
                 }
             }
         }
-        
     }
 }  
 
@@ -133,7 +162,3 @@ $card-transition-time: 0.5s;
     }
 }
 
-img{
-    width: 100px;
-    height: 150px;
-}
