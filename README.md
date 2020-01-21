@@ -1,2 +1,2 @@
-Run npm install
-npm run start
+- Run npm install
+- npm run start
